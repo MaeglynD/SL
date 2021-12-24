@@ -30,7 +30,7 @@ export default {
     };
   },
   async mounted() {
-    const test = await this.$axios.$get('/api/test');
+    const test = await this.$axios.$get('/api/getImagesByAlbumId?id=1');
 
     console.log(test);
   },
