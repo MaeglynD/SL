@@ -1,4 +1,77 @@
-html, body{
-  width: 100%;
+.book-viewing{
+  height: 100vh;
+  background: #e7e6e5;
+
+  &__selection{
+    user-select: none;
+    width: 260px;
+    height: 100%;
+    overflow-y: hidden;
+    background: white;
+  }
+
+  &__info{
+    text-align: center;
+    padding: 20px 37px 30px 30px;
+  }
+
+  &__info-timespan{
+    font-family: $secondary-font;
+    color: $color-b;
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  &__info-description{
+    color: $color-c;
+    line-height: 1.7;
+    font-size: 15.5px;
+  }
+
+  &__delim{
+    border: 0;
+    height: 1px;
+    background: #e7e5e3;
+    margin-top: 50px;
+  }
+
+  &__thumbnail-container{
+    text-align: center;
+    padding: 25px 37px 0px 30px;
+  }
+
+  &__thumbnail-index{
+    padding-top: 10px;
+  }
+}
+
+
+/* Dependency injection stylings */
+::v-deep * {
+  /* simplebar stylings */
+  [data-simplebar]{
+    height: 100%;
+    padding: 20px 0px;
+  }
+
+  .simplebar-track.simplebar-vertical{
+    width: 7px;
+    background: #efeff0;
+  }
+
+  .simplebar-track.simplebar-vertical .simplebar-scrollbar::before{
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #858585;
+  }
+
+  /* vuetify stylings */
+  .v-image__image{
+    background-size: contain;
+  }
+}
+
+.v-lazy{
   height: 100%;
 }
