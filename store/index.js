@@ -14,11 +14,11 @@ export const mutations = {
     state.books = books;
   },
 
-  SET_PAGES: (state, bookId, pages) => {
+  SET_PAGES: (state, { bookId, data }) => {
     const foundBook = state.books.find(({ id }) => id === bookId);
 
     if (foundBook) {
-      foundBook.pages = pages;
+      foundBook.pages = data;
     }
   },
 
@@ -48,7 +48,7 @@ export const actions = {
     const { commit } = context;
 
     await apiCallWrapper.call(this, context, `/api/getBookPages/?id=${bookId}`, async (data) => {
-      commit('SET_PAGES', data);
+      commit('SET_PAGES', { bookId, data });
     });
   },
 };

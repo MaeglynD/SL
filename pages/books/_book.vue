@@ -62,10 +62,11 @@ export default {
       await this.loadBooks();
     }
 
-    const foundBook = this.books.find(({ url }) => url === this.$route.params.book);
+    const foundBook = this.books.find(({ url }) => url === this.$route.params.book.toLowerCase());
 
     if (!foundBook) {
       this.SET_PAGE_STATE(new Error('The requested book was not found'));
+      return;
     }
 
     if (!foundBook.pages) {

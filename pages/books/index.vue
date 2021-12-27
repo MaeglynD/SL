@@ -47,8 +47,10 @@ export default {
     //
   },
 
-  mounted() {
-    //
+  async mounted() {
+    if (!this.books.length) {
+      await this.loadBooks();
+    }
   },
 
   methods: {
