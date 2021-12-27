@@ -1,18 +1,23 @@
 <template>
-  <div>
+  <!-- Loading -->
+  <div v-if="pageState.state === 'loading'">
+    loading books...
+  </div>
+
+  <!-- Error -->
+  <div v-else-if="pageState.state === 'error'">
+    Books page error: {{ pageState.errorMessage }}
+  </div>
+
+  <!-- Book list -->
+  <div v-else>
     books page
-    <div
+    <v-btn
       v-for="book in books"
       :key="book.id"
-      :key-test="2"
+      @click="goToBook(book.url)"
     >
       {{ book.name }}
-    </div>
-    <v-btn
-      color="success"
-      @click="goToBook()"
-    >
-      click to go to specific book page
     </v-btn>
   </div>
 </template>
@@ -30,33 +35,34 @@ export default {
   computed: {
     ...mapState([
       'books',
+      'pageState',
     ]),
+
     ...mapGetters([
-      'formattedPageState',
+      //
     ]),
   },
 
   created() {
     //
-
   },
 
-  async mounted() {
-    await this.loadBooks();
-
-    console.log(this.books);
+  mounted() {
+    //
   },
 
   methods: {
-
     ...mapActions([
       'loadBooks',
-      'loadBookPages',
     ]),
 
-    goToBook() {
-      // this.$router.push('/books/test-title');
+    goToBook(url) {
+      this.$router.push(`/books/${url}`);
     },
   },
 };
 </script>
+
+<style scoped lang="scss">
+  @import '~/assets/scss/pages/books/index.scss';
+</style>

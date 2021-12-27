@@ -6,16 +6,7 @@ export const state = () => ({
 });
 
 export const getters = {
-  formattedPageState: ({ pageState }) => {
-    if (pageState instanceof Error) {
-      return {
-        error: pageState,
-        errorMessage: `An error occured: ${pageState.toString()}`,
-      };
-    }
-
-    return pageState;
-  },
+  //
 };
 
 export const mutations = {
@@ -24,7 +15,7 @@ export const mutations = {
   },
 
   SET_PAGES: (state, bookId, pages) => {
-    const foundBook = state.find(({ id }) => id === bookId);
+    const foundBook = state.books.find(({ id }) => id === bookId);
 
     if (foundBook) {
       foundBook.pages = pages;
@@ -32,7 +23,15 @@ export const mutations = {
   },
 
   SET_PAGE_STATE: (state, pageState) => {
-    state.pageState = pageState;
+    if (pageState instanceof Error) {
+      state.pageState = {
+        state: 'error',
+        error: pageState,
+        errorMessage: `An error occured: ${pageState.toString()}`,
+      };
+    } else {
+      state.pageState = { state: pageState };
+    }
   },
 };
 

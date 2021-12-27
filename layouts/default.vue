@@ -7,10 +7,20 @@
 <script>
 export default {
   name: 'DefaultLayout',
+
   data: () => ({
     //
   }),
+
+  computed: {
+    //
+  },
+
   mounted() {
+    //
+  },
+
+  methods: {
     //
   },
 };

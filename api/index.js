@@ -22,7 +22,7 @@ app.get('/getBookPages', async (req, res) => {
       foundBook.pages = getImagesFromAlbum(album);
     }
 
-    responseObject = foundBook.links;
+    responseObject = foundBook.pages;
   } catch (err) {
     responseObject = { error: err.toString() };
   } finally {
