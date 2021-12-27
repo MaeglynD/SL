@@ -37,8 +37,6 @@
       </div>
     </v-lazy>
   </div>
-    <!-- {{ JSON.stringify(book) }} -->
-  </div>
 </template>
 
 <script>
