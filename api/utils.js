@@ -1,5 +1,29 @@
-const albumRegex = /\["(https:\/\/lh3\.googleusercontent\.com\/[a-zA-Z0-9\-_]*)"/g;
+const googlePhotosBaseUrl = 'https://photos.app.goo.gl/';
+const bookCoversAlbumId = 'R26Nu3Q5W3xwDnf7A';
+
+const getImagesFromAlbum = (album) => [...album.data.matchAll(/\["(https:\/\/lh3\.googleusercontent\.com\/[a-zA-Z0-9\-_]*)"/g)].map(([_, b]) => b);
+
+async function apiCallWrapper({ commit }, requestUrl, requestLogic) {
+  try {
+    commit('SET_PAGE_STATE', 'loading');
+
+    const { data, error } = await this.$axios.get(requestUrl);
+
+    if (error) {
+      throw new Error(`Server Error: ${error}`);
+    }
+
+    await requestLogic(data);
+
+    commit('SET_PAGE_STATE', '');
+  } catch (err) {
+    commit('SET_PAGE_STATE', err);
+  }
+}
 
 module.exports = {
-  albumRegex,
+  bookCoversAlbumId,
+  googlePhotosBaseUrl,
+  getImagesFromAlbum,
+  apiCallWrapper,
 };

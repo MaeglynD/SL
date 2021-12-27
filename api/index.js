@@ -2,11 +2,11 @@
 const axios = require('axios');
 const express = require('express');
 const books = require('./books');
-const { albumRegex } = require('./utils');
+const { googlePhotosBaseUrl, bookCoversAlbumId, getImagesFromAlbum } = require('./utils');
 
 const app = express();
 
-app.get('/getImagesByAlbumId', async (req, res) => {
+app.get('/getBookPages', async (req, res) => {
   let responseObject;
 
   try {
@@ -17,10 +17,35 @@ app.get('/getImagesByAlbumId', async (req, res) => {
       throw new Error('The specified book id was not found');
     }
 
-    const album = await axios.get(`https://photos.app.goo.gl/${foundBook.albumId}`);
-    const links = [...album.data.matchAll(albumRegex)].map(([_, b]) => b);
+    if (!foundBook.pages) {
+      const album = await axios.get(`${googlePhotosBaseUrl}${foundBook.albumId}`);
+      foundBook.pages = getImagesFromAlbum(album);
+    }
 
-    responseObject = { links };
+    responseObject = foundBook.links;
+  } catch (err) {
+    responseObject = { error: err.toString() };
+  } finally {
+    res.json(responseObject);
+  }
+});
+
+app.get('/getBooks', async (req, res) => {
+  let responseObject;
+
+  try {
+    if (!Object.prototype.hasOwnProperty.call(books[0], 'bookCoverUrl')) {
+      const album = await axios.get(`${googlePhotosBaseUrl}${bookCoversAlbumId}`);
+      const imagesFromAlbum = getImagesFromAlbum(album);
+
+      books.forEach((book, i) => {
+        book.bookCoverUrl = imagesFromAlbum[i];
+      });
+    }
+
+    const booksWithAlbumIdOmitted = books.map(({ albumId, ...theRest }) => theRest);
+
+    responseObject = booksWithAlbumIdOmitted;
   } catch (err) {
     responseObject = { error: err.toString() };
   } finally {
