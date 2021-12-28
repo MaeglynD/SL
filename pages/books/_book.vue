@@ -42,7 +42,7 @@
               'book-viewing__thumbnail-container--active': url === page
             }"
           >
-            <v-img
+            <v-img-no-referrer
               v-ripple
               referrerpolicy="no-referrer"
               :lazy-src="`${url}=w200`"
@@ -66,13 +66,47 @@
         v-if="isPanZoomActive"
         :options="panZoomOptions"
       >
-        <v-img
+        <v-img-no-referrer
           transition="fade-transition"
           referrerpolicy="no-referrer"
           :lazy-src="`${page}=w200`"
           :src="`${page}=d`"
         />
       </panZoom>
+
+      <div class="book-viewing__controls">
+        <v-tooltip
+          v-for="({ icon, tooltip, fn }, i) in controls"
+          :key="`control-${i}`"
+          left
+          transition="slide-x-reverse-transition"
+          color="rgba(114,116,123, 0.7)"
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn
+              icon
+              :class="`
+                book-viewing__controls-item
+                book-viewing__conrols-item--${tooltip.split(' ').join('-')}
+              `"
+              elevation="2"
+              v-bind="attrs"
+              large
+              dark
+              v-on="on"
+              @click="fn()"
+            >
+              <v-icon size="18">
+                {{ icon }}
+              </v-icon>
+            </v-btn>
+          </template>
+
+          <span>
+            {{ tooltip }}
+          </span>
+        </v-tooltip>
+      </div>
     </div>
   </div>
 </template>
@@ -88,17 +122,24 @@ export default {
     simplebar,
   },
 
-  data: () => ({
+  data: (vm) => ({
+    page: '',
     isPanZoomActive: true,
     bookViewingSelectionLazyModel: false,
     book: null,
-    page: '',
     panZoomOptions: {
       bounds: true,
       initialX: 400,
       initialY: 0,
       initialZoom: 0.9,
     },
+    controls: [
+      { icon: 'mdi-information-variant', tooltip: 'book information', fn: vm.showInfo },
+      { icon: 'mdi-magnify-minus-outline', tooltip: 'zoom out', fn: vm.zoomOut },
+      { icon: 'mdi-magnify-plus-outline', tooltip: 'zoom in', fn: vm.zoomIn },
+      { icon: 'mdi-image-filter-center-focus', tooltip: 'reset orientation', fn: vm.resetOrientation },
+      { icon: 'mdi-home', tooltip: 'return to bookshelf', fn: vm.goToBookShelf },
+    ],
   }),
 
   computed: {
@@ -167,6 +208,26 @@ export default {
       this.$nextTick(() => {
         this.isPanZoomActive = true;
       });
+    },
+
+    showInfo() {
+      //
+    },
+
+    zoomIn() {
+      //
+    },
+
+    zoomOut() {
+      //
+    },
+
+    resetOrientation() {
+      this.setPage(this.page);
+    },
+
+    goToBookShelf() {
+      this.$router.push('/books');
     },
   },
 };

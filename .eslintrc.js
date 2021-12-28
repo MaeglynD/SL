@@ -23,6 +23,7 @@ module.exports = {
     'no-shadow': 0,
     'import/no-extraneous-dependencies': 0,
     'prefer-destructuring': 0,
+    'vuejs-accessibility/click-events-have-key-events': 0,
   },
   settings: {
     'import/core-modules': [

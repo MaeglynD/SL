@@ -11,6 +11,21 @@ html{
     width: 100%;
     height: 100%;
     overflow: hidden;
+    position: relative;
+  }
+
+  &__controls{
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    flex-direction: column-reverse;
+    display: flex;
+  }
+
+  &__controls-item{
+    background: rgba($color-e, 0.9);
+    color: white;
+    margin-top: 20px;
   }
 
   &__page{
@@ -53,6 +68,10 @@ html{
   &__thumbnail-container{
     text-align: center;
     padding: 25px 37px 0px 30px;
+
+    .v-image{
+      cursor: pointer;
+    }
 
     &--active{
       .v-image{
@@ -98,7 +117,7 @@ html{
     height: 100%;
 
     .v-image{
-      height: 80%;
+      height: 90%;
     }
   }
 }
