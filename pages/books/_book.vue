@@ -36,12 +36,18 @@
           <div
             v-for="(url, i) in book.pages"
             :key="`book-page-${i}`"
-            class="book-viewing__thumbnail-container"
+            class=""
+            :class="{
+              'book-viewing__thumbnail-container': true,
+              'book-viewing__thumbnail-container--active': url === page
+            }"
           >
             <v-img
+              v-ripple
               referrerpolicy="no-referrer"
               :lazy-src="`${url}=w200`"
               :src="`${url}=w500`"
+              @click="setPage(url)"
             />
 
             <div class="book-viewing__thumbnail-index">
@@ -51,6 +57,23 @@
         </simplebar>
       </div>
     </v-lazy>
+
+    <div
+      ref="pageContainer"
+      class="book-viewing__page-container"
+    >
+      <panZoom
+        v-if="isPanZoomActive"
+        :options="panZoomOptions"
+      >
+        <v-img
+          transition="fade-transition"
+          referrerpolicy="no-referrer"
+          :lazy-src="`${page}=w200`"
+          :src="`${page}=d`"
+        />
+      </panZoom>
+    </div>
   </div>
 </template>
 
@@ -66,8 +89,16 @@ export default {
   },
 
   data: () => ({
+    isPanZoomActive: true,
     bookViewingSelectionLazyModel: false,
     book: null,
+    page: '',
+    panZoomOptions: {
+      bounds: true,
+      initialX: 400,
+      initialY: 0,
+      initialZoom: 0.9,
+    },
   }),
 
   computed: {
@@ -104,6 +135,7 @@ export default {
     }
 
     this.book = foundBook;
+    this.page = foundBook.pages[0];
   },
 
   mounted() {
@@ -126,6 +158,15 @@ export default {
 
     getMonthFromTimestamp(timestamp) {
       return (new Date(timestamp)).toLocaleString('default', { month: 'short' });
+    },
+
+    setPage(url) {
+      this.page = url;
+      this.isPanZoomActive = false;
+
+      this.$nextTick(() => {
+        this.isPanZoomActive = true;
+      });
     },
   },
 };

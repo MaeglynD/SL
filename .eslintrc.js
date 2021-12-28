@@ -22,6 +22,7 @@ module.exports = {
     'no-param-reassign': ['error', { props: false }],
     'no-shadow': 0,
     'import/no-extraneous-dependencies': 0,
+    'prefer-destructuring': 0,
   },
   settings: {
     'import/core-modules': [
