@@ -20,7 +20,21 @@
       :options="{ threshold: 0.2 }"
     >
       <div class="book-viewing__selection">
-        <simplebar data-simplebar-auto-hide="false">
+        <transition name="slide-y-transition">
+          <div
+            v-if="showReturnToTop"
+            class="book-viewing__return-to-top"
+            @click="scrollSelectionToTop"
+          >
+            Return to top
+          </div>
+        </transition>
+
+        <simplebar
+          ref="selection"
+          data-simplebar-auto-hide="false"
+          @scroll="onSelectionScroll"
+        >
           <div class="book-viewing__info">
             <div class="book-viewing__info-timespan">
               {{ getTimespan }}
@@ -64,6 +78,7 @@
     >
       <panZoom
         v-if="isPanZoomActive"
+        ref="panzoom"
         :options="panZoomOptions"
       >
         <v-img-no-referrer
@@ -114,10 +129,12 @@
 <script>
 import simplebar from 'simplebar-vue';
 import 'simplebar/dist/simplebar.min.css';
+import { debounce } from 'vue-debounce';
 import { mapActions, mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'BooksPage',
+
   components: {
     simplebar,
   },
@@ -125,18 +142,17 @@ export default {
   data: (vm) => ({
     page: '',
     isPanZoomActive: true,
+    showReturnToTop: false,
     bookViewingSelectionLazyModel: false,
     book: null,
     panZoomOptions: {
       bounds: true,
-      initialX: 400,
-      initialY: 0,
       initialZoom: 0.9,
     },
     controls: [
       { icon: 'mdi-information-variant', tooltip: 'book information', fn: vm.showInfo },
-      { icon: 'mdi-magnify-minus-outline', tooltip: 'zoom out', fn: vm.zoomOut },
-      { icon: 'mdi-magnify-plus-outline', tooltip: 'zoom in', fn: vm.zoomIn },
+      { icon: 'mdi-magnify-minus-outline', tooltip: 'zoom out', fn: () => vm.zoom(0.7) },
+      { icon: 'mdi-magnify-plus-outline', tooltip: 'zoom in', fn: () => vm.zoom(1.5) },
       { icon: 'mdi-image-filter-center-focus', tooltip: 'reset orientation', fn: vm.resetOrientation },
       { icon: 'mdi-home', tooltip: 'return to bookshelf', fn: vm.goToBookShelf },
     ],
@@ -214,12 +230,10 @@ export default {
       //
     },
 
-    zoomIn() {
-      //
-    },
+    zoom(scale) {
+      const { offsetHeight, offsetWidth } = this.$refs.pageContainer;
 
-    zoomOut() {
-      //
+      this.$refs.panzoom.$panZoomInstance.smoothZoom(offsetWidth / 2, offsetHeight / 2, scale);
     },
 
     resetOrientation() {
@@ -229,6 +243,22 @@ export default {
     goToBookShelf() {
       this.$router.push('/books');
     },
+
+    scrollSelectionToTop() {
+      const el = this.$refs.selection?.SimpleBar?.contentWrapperEl;
+
+      if (el) {
+        el.scroll({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+    },
+
+    // eslint-disable-next-line func-names
+    onSelectionScroll: debounce(function ({ target: { scrollTop } }) {
+      this.showReturnToTop = scrollTop > 400;
+    }, 60),
   },
 };
 </script>

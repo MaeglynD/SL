@@ -1,5 +1,7 @@
 <script>
 /*  eslint-disable */
+/* This file is simply extending VImg to load img's with the referrer=no-referrer policy */
+
 import { VImg } from 'vuetify/lib';
 
 const hasIntersect = typeof window !== 'undefined' && 'IntersectionObserver' in window;

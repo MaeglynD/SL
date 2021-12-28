@@ -12,6 +12,11 @@ html{
     height: 100%;
     overflow: hidden;
     position: relative;
+    cursor: grab;
+
+    &:active{
+      cursor: grabbing;
+    }
   }
 
   &__controls{
@@ -38,6 +43,27 @@ html{
     height: 100%;
     overflow-y: hidden;
     background: white;
+    position: relative;
+  }
+
+  &__return-to-top{
+    font-family: $secondary-font;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    padding-right: 27px;
+    z-index: 1;
+    backdrop-filter: blur(7px);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    transition: 0.2s;
+    cursor: pointer;
+
+    &:hover{
+      backdrop-filter: blur(10px);
+    }
   }
 
   &__info{
