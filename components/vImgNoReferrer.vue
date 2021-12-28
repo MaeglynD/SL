@@ -1,6 +1,6 @@
 <script>
 /*  eslint-disable */
-import { VImg } from 'vuetify\\lib\\components\\VImg';
+import { VImg } from 'vuetify/lib';
 
 const hasIntersect = typeof window !== 'undefined' && 'IntersectionObserver' in window;
 
