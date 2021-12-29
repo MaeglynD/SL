@@ -1,4 +1,93 @@
-// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
-//
-// The variables you want to modify
-// $font-size-root: 20px;
+.oeuvre{
+
+  &__gradient-overlay{
+    position: absolute;
+    width: 100%;
+    height: 60vh;
+    top: 0;
+    left: 0;
+    background: linear-gradient(180deg, rgba(245,243,241,1) 0%, rgba(255,255,255,1) 100%);
+  }
+
+  &__header-container{
+    position: relative;
+    width: 100%;
+    padding: 120px 20px;
+    user-select: none;
+
+    * {
+      font-family: $secondary-font;
+    }
+  }
+
+  &__header-background-text{
+    position: absolute;
+    font-size: 180px;
+    color: $color-d;
+    text-align: center;
+    width: 100%;
+    bottom: -197px;
+    opacity: 0.4;
+    overflow-x: hidden;
+  }
+
+
+  &__header{
+    font-size: 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  &__book-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    gap: 70px 30px;
+    padding-bottom: 300px;
+    max-width: 1300px;
+    margin: auto;
+  }
+
+  &__book-container{
+    width: 279px;
+    padding: 30px;
+    position: relative;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover{
+      background: white;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+
+    .v-image{
+      height: 250px;
+    }
+  }
+
+  &__book-name{
+    font-size: 18px;
+    font-family: $secondary-font;
+    color: $color-b;
+    font-weight: 600;
+    margin-top: 40px;
+  }
+
+  &__book-desc{
+    color: $color-c;
+    font-size: 15px;
+    margin-top: 13px;
+    line-height: 1.9;
+    padding-bottom: 46px;
+  }
+
+  &__book-page-count{
+    position: absolute;
+    bottom: 30px;
+    margin-top: 15px;
+    color: $color-accent;
+    font-size: 15px;
+  }
+
+}
