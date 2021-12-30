@@ -81,9 +81,22 @@
                 referrerpolicy="no-referrer"
                 :lazy-src="`${url}=w200`"
                 :src="`${url}=w500`"
-                min-height="140"
+                min-height="130"
                 @click="setPage(url)"
-              />
+              >
+                <template #placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    />
+                  </v-row>
+                </template>
+              </v-img-no-referrer>
 
               <div class="book-viewing__thumbnail-index">
                 {{ i + 1 }}
