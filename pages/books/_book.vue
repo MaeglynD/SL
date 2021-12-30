@@ -193,6 +193,12 @@ export default {
     ],
   }),
 
+  head() {
+    return {
+      title: this.book?.name ? this.book.name : 'Loading...',
+    };
+  },
+
   computed: {
     ...mapState([
       'books',

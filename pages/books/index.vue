@@ -93,6 +93,10 @@ export default {
     //
   }),
 
+  head: () => ({
+    title: 'Oeuvre',
+  }),
+
   computed: {
     ...mapState([
       'books',
