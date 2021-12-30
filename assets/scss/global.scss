@@ -24,6 +24,10 @@ html, body{
   opacity: 0;
 }
 
+.v-image__placeholder{
+  display: flex;
+}
+
 .global{
   &__error{
     position: relative;
