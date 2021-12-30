@@ -1,5 +1,4 @@
 .oeuvre{
-
   &__gradient-overlay{
     position: absolute;
     width: 100%;
@@ -89,5 +88,30 @@
     color: $color-accent;
     font-size: 15px;
   }
+}
 
+.oeuvre-loading{
+  &__container{
+    width: 100%;
+    padding: 0px 30px 100px 30px;
+  }
+
+  &__image-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__image-and-text{
+    display: flex;
+    flex-direction: column;
+    height: 260px;
+    width: 200px;
+
+    ::v-deep .v-skeleton-loader__paragraph{
+      padding-top: 30px;
+    }
+  }
 }

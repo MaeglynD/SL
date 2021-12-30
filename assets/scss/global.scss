@@ -23,3 +23,23 @@ html, body{
 .page-leave-to {
   opacity: 0;
 }
+
+.global{
+  &__error{
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(3px);
+
+    code{
+      margin-top: 20px;
+      padding: 20px !important;
+    }
+  }
+}

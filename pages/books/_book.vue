@@ -1,128 +1,150 @@
 <template>
-  <!-- Loading -->
-  <div v-if="pageState.state === 'loading'">
-    loading books...
-  </div>
-
-  <!-- Error -->
-  <div v-else-if="pageState.state === 'error'">
-    Book page error: {{ pageState.errorMessage }}
-  </div>
-
   <!-- Book list -->
-  <div
-    v-else-if="book"
-    class="book-viewing"
-  >
-    <v-lazy
-      v-model="bookViewingSelectionLazyModel"
-      transition="fade-transition"
-      :options="{ threshold: 0.2 }"
-    >
-      <div class="book-viewing__selection">
-        <transition name="slide-y-transition">
-          <div
-            v-if="showReturnToTop"
-            class="book-viewing__return-to-top"
-            @click="scrollSelectionToTop"
-          >
-            Return to top
-          </div>
-        </transition>
-
-        <simplebar
-          ref="selection"
-          data-simplebar-auto-hide="false"
-          @scroll="onSelectionScroll"
-        >
-          <div class="book-viewing__info">
-            <div class="book-viewing__info-timespan">
-              {{ getTimespan }}
-            </div>
-
-            <div class="book-viewing__info-description">
-              {{ book.desc }}
-            </div>
-
-            <hr class="book-viewing__delim">
-          </div>
-
-          <div
-            v-for="(url, i) in book.pages"
-            :key="`book-page-${i}`"
-            class=""
-            :class="{
-              'book-viewing__thumbnail-container': true,
-              'book-viewing__thumbnail-container--active': url === page
-            }"
-          >
-            <v-img-no-referrer
-              v-ripple
-              referrerpolicy="no-referrer"
-              :lazy-src="`${url}=w200`"
-              :src="`${url}=w500`"
-              @click="setPage(url)"
-            />
-
-            <div class="book-viewing__thumbnail-index">
-              {{ i + 1 }}
-            </div>
-          </div>
-        </simplebar>
-      </div>
-    </v-lazy>
-
-    <div
-      ref="pageContainer"
-      class="book-viewing__page-container"
-    >
-      <panZoom
-        v-if="isPanZoomActive"
-        ref="panzoom"
-        :options="panZoomOptions"
-      >
-        <v-img-no-referrer
-          transition="fade-transition"
-          referrerpolicy="no-referrer"
-          :lazy-src="`${page}=w200`"
-          :src="`${page}=d`"
+  <div class="book-viewing book-viewing-loading">
+    <template v-if="pageState.state === 'loading'">
+      <div class="book-viewing__selection book-viewing-loading__selection">
+        <v-skeleton-loader
+          type="paragraph, divider"
         />
-      </panZoom>
+        <v-skeleton-loader
+          v-for="i in 4"
+          :key="`skeleton-book-viewing-selection-${i}`"
+          type="image"
+          class="book-viewing-loading__page-preview"
+        />
+      </div>
 
-      <div class="book-viewing__controls">
-        <v-tooltip
-          v-for="({ icon, tooltip, fn }, i) in controls"
-          :key="`control-${i}`"
-          left
-          transition="slide-x-reverse-transition"
-          color="rgba(114,116,123, 0.7)"
+      <div class="book-viewing__page-container book-viewing-loading__page-container">
+        <v-skeleton-loader
+          class="book-viewing-loading__page"
+          type="image"
+        />
+      </div>
+
+      <div class="book-viewing__controls book-viewing-loading__controls">
+        <v-skeleton-loader
+          v-for="i in 4"
+          :key="`skeleton-book-viewing-controls-${i}`"
+          type="avatar"
+        />
+      </div>
+    </template>
+
+    <template v-else-if="pageState.state === 'error'">
+      <error-message />
+    </template>
+
+    <template v-else>
+      <v-lazy
+        v-model="bookViewingSelectionLazyModel"
+        transition="fade-transition"
+        :options="{ threshold: 0.2 }"
+      >
+        <div class="book-viewing__selection">
+          <transition name="slide-y-transition">
+            <div
+              v-if="showReturnToTop"
+              class="book-viewing__return-to-top"
+              @click="scrollSelectionToTop"
+            >
+              Return to top
+            </div>
+          </transition>
+
+          <simplebar
+            ref="selection"
+            data-simplebar-auto-hide="false"
+            @scroll="onSelectionScroll"
+          >
+            <div class="book-viewing__info">
+              <div class="book-viewing__info-timespan">
+                {{ getTimespan }}
+              </div>
+
+              <div class="book-viewing__info-description">
+                {{ book.desc }}
+              </div>
+
+              <hr class="book-viewing__delim">
+            </div>
+
+            <div
+              v-for="(url, i) in book.pages"
+              :key="`book-page-${i}`"
+              :class="{
+                'book-viewing__thumbnail-container': true,
+                'book-viewing__thumbnail-container--active': url === page
+              }"
+            >
+              <v-img-no-referrer
+                v-ripple
+                referrerpolicy="no-referrer"
+                :lazy-src="`${url}=w200`"
+                :src="`${url}=w500`"
+                min-height="140"
+                @click="setPage(url)"
+              />
+
+              <div class="book-viewing__thumbnail-index">
+                {{ i + 1 }}
+              </div>
+            </div>
+          </simplebar>
+        </div>
+      </v-lazy>
+
+      <div
+        ref="pageContainer"
+        class="book-viewing__page-container"
+      >
+        <panZoom
+          v-if="isPanZoomActive"
+          ref="panzoom"
+          :options="panZoomOptions"
         >
-          <template #activator="{ on, attrs }">
-            <v-btn
-              icon
-              :class="`
+          <v-img-no-referrer
+            transition="fade-transition"
+            referrerpolicy="no-referrer"
+            :lazy-src="`${page}=w200`"
+            :src="`${page}=d`"
+          />
+        </panZoom>
+
+        <div class="book-viewing__controls">
+          <v-tooltip
+            v-for="({ icon, tooltip, fn }, i) in controls"
+            :key="`control-${i}`"
+            left
+            transition="slide-x-reverse-transition"
+            color="rgba(114,116,123, 0.7)"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn
+                icon
+                :class="`
                 book-viewing__controls-item
                 book-viewing__conrols-item--${tooltip.split(' ').join('-')}
               `"
-              elevation="2"
-              v-bind="attrs"
-              large
-              dark
-              v-on="on"
-              @click="fn()"
-            >
-              <v-icon size="18">
-                {{ icon }}
-              </v-icon>
-            </v-btn>
-          </template>
+                elevation="2"
+                v-bind="attrs"
+                large
+                dark
+                v-on="on"
+                @click="fn()"
+              >
+                <v-icon size="18">
+                  {{ icon }}
+                </v-icon>
+              </v-btn>
+            </template>
 
-          <span>
-            {{ tooltip }}
-          </span>
-        </v-tooltip>
+            <span>
+              {{ tooltip }}
+            </span>
+          </v-tooltip>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -144,7 +166,7 @@ export default {
     isPanZoomActive: true,
     showReturnToTop: false,
     bookViewingSelectionLazyModel: false,
-    book: null,
+    book: {},
     panZoomOptions: {
       bounds: true,
       initialZoom: 0.9,
