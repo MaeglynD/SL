@@ -7,10 +7,10 @@ async function apiCallWrapper({ commit }, requestUrl, requestLogic) {
   try {
     commit('SET_PAGE_STATE', 'loading');
 
-    const { data, error } = await this.$axios.get(requestUrl);
+    const { data } = await this.$axios.get(requestUrl);
 
-    if (error) {
-      throw new Error(`Server Error: ${error}`);
+    if (data.error) {
+      throw new Error(`Server Error: ${data.error}`);
     }
 
     await requestLogic(data);
