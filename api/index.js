@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 const axios = require('axios');
 const express = require('express');
