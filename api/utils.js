@@ -17,6 +17,12 @@ async function apiCallWrapper({ commit }, requestUrl, requestLogic) {
 
     commit('SET_PAGE_STATE', '');
   } catch (err) {
+    if (err.response?.status === 401) {
+      await this.$axios.post('/api/logout');
+
+      this.$router.push('/login');
+    }
+
     commit('SET_PAGE_STATE', err);
   }
 }

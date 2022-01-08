@@ -24,6 +24,8 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     'prefer-destructuring': 0,
     'vuejs-accessibility/click-events-have-key-events': 0,
+    'consistent-return': 0,
+    'arrow-body-style': 0,
   },
   settings: {
     'import/core-modules': [
