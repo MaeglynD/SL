@@ -1,13 +1,13 @@
 require('dotenv').config();
 
 const express = require('express');
-const session = require('express-session');
+const session = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const cloudflareIPs = require('cloudflare-ips');
+// const cloudflareIPs = require('cloudflare-ips');
 const LocalStrategy = require('passport-local').Strategy;
 
 const books = require('./books');
@@ -45,10 +45,10 @@ if (process.env.NODE_ENV === 'production') {
   app.enable('trust proxy');
   app.set('trust proxy', 1);
 
-  cloudflareIPs(
-    (ips) => app.set('trust proxy', ['loopback', ...ips]),
-    (err) => console.log(err.stack),
-  );
+  // cloudflareIPs(
+  //   (ips) => app.set('trust proxy', ['loopback', ...ips]),
+  //   (err) => console.log(err.stack),
+  // );
 }
 
 app.use(session({
@@ -74,6 +74,8 @@ const jsonError = (err, req, res) => {
 };
 
 app.post('/login', async (req, res, next) => {
+  console.log(req.ip);
+  console.log(req.ips);
   passport.authenticate('local', (err, user) => {
     if (err) return next(err);
 
