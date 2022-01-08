@@ -14,6 +14,10 @@ const { googlePhotosBaseUrl, bookCoversAlbumId, getImagesFromAlbum } = require('
 
 const app = express();
 
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -53,10 +57,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-}
 
 const isAuthenticated = (req, res, next) => {
   return req.isAuthenticated() ? next() : res.sendStatus(401);
