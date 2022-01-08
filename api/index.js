@@ -7,16 +7,13 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
+const cloudflareIPs = require('cloudflare-ips');
 const LocalStrategy = require('passport-local').Strategy;
 
 const books = require('./books');
 const { googlePhotosBaseUrl, bookCoversAlbumId, getImagesFromAlbum } = require('./utils');
 
 const app = express();
-
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-}
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -43,6 +40,16 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+if (process.env.NODE_ENV === 'production') {
+  app.enable('trust proxy');
+  app.set('trust proxy', 1);
+
+  cloudflareIPs(
+    (ips) => app.set('trust proxy', ['loopback', ...ips]),
+    (err) => console.log(err.stack),
+  );
+}
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
