@@ -15,7 +15,7 @@ const { googlePhotosBaseUrl, bookCoversAlbumId, getImagesFromAlbum } = require('
 const app = express();
 
 if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 2);
+  app.set('trust proxy', 1);
 }
 
 passport.serializeUser((user, done) => {
@@ -47,10 +47,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
+  proxy: true,
   saveUninitialized: true,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
-    sameSite: true,
     maxAge: 1800000,
   },
 }));
