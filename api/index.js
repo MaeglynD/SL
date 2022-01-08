@@ -54,6 +54,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 const isAuthenticated = (req, res, next) => {
   return req.isAuthenticated() ? next() : res.sendStatus(401);
 };
