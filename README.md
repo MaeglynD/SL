@@ -1,4 +1,4 @@
-# seline-life
+# SL
 
 ## Build Setup
 
