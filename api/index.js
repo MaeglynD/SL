@@ -50,10 +50,8 @@ app.use(session({
   resave: false,
   proxy: true,
   saveUninitialized: true,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 1800000,
-  },
+  secure: process.env.NODE_ENV === 'production',
+  maxAge: 1800000,
 }));
 
 app.use(passport.initialize());
