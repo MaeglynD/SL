@@ -50,7 +50,6 @@ app.use(session({
   resave: false,
   proxy: true,
   saveUninitialized: true,
-  secure: process.env.NODE_ENV === 'production',
   maxAge: 1800000,
 }));
 
