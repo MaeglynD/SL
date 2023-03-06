@@ -195,7 +195,7 @@ export default {
 
   head() {
     return {
-      title: this.book?.name ? this.book.name : 'Loading...',
+      title: this.book?.name || 'Loading...',
     };
   },
 
